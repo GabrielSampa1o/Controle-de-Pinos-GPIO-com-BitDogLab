@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "author": "Humberto Bandeira Costa",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-pi-pico-w",
+      "id": "pico",
+      "top": -3.25,
+      "left": 185.95,
+      "attrs": { "builder": "pico-sdk" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 157.55,
+      "left": 38.4,
+      "attrs": { "value": "220000" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 121.2,
+      "left": 99.8,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-membrane-keypad",
+      "id": "keypad1",
+      "top": -184.4,
+      "left": -349.6,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [ "pico:GP0", "$serialMonitor:RX", "", [] ],
+    [ "pico:GP1", "$serialMonitor:TX", "", [] ],
+    [ "pico:GP13", "led1:A", "green", [ "h0" ] ],
+    [ "led1:C", "r1:2", "green", [ "v0" ] ],
+    [ "r1:1", "pico:GND.4", "green", [ "v9.6" ] ],
+    [ "pico:GP1", "keypad1:C4", "green", [ "h-268.8", "v144", "h-105.6" ] ],
+    [ "pico:GP2", "keypad1:C3", "green", [ "h-268.8", "v124.8", "h-115.2" ] ],
+    [ "pico:GP3", "keypad1:C2", "green", [ "h-268.8", "v115.2", "h-124.8" ] ],
+    [ "pico:GP4", "keypad1:C1", "green", [ "h-268.8", "v105.6", "h-134.4" ] ],
+    [ "pico:GP5", "keypad1:R4", "green", [ "h-268.8", "v96", "h-144" ] ],
+    [ "pico:GP6", "keypad1:R3", "green", [ "h-268.8", "v76.8", "h-153.6", "v-19.2" ] ],
+    [ "pico:GP7", "keypad1:R2", "green", [ "h-268.8", "v67.2", "h-163.2" ] ],
+    [ "pico:GP8", "keypad1:R1", "green", [ "h-268.8", "v57.6", "h-172.8" ] ]
+  ],
+  "dependencies": {}
+}
