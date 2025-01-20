@@ -51,6 +51,4 @@ Para começar a usar este projeto, siga as instruções abaixo:
 
 ## Vídeo de Demonstração
 
-Confira o vídeo abaixo mostrando o funcionamento do projeto:
-
-[Link do vídeo de demonstração aqui]
+[Assista ao vídeo de demonstração aqui]([https://www.dropbox.com/s/example/video.mp4?dl=0](https://www.dropbox.com/scl/fi/7hx1d0oze351n7ilbedim/VID_20250119_200205.mp4?rlkey=cdngyxbodq1irfhztgx6xjlrn&st=z8hlmbmg&dl=0))
