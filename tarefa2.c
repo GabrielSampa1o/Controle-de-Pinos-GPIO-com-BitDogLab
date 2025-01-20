@@ -7,7 +7,7 @@
 #define GREEN_LED_PIN 11
 #define BLUE_LED_PIN 12
 #define RED_LED_PIN 13
-
+#define BUTTON_PIN 5
 
 void configure_pins() {
     gpio_init(GREEN_LED_PIN);
@@ -21,53 +21,47 @@ void configure_pins() {
 
     gpio_init(BUZZER_PIN);
     gpio_set_dir(BUZZER_PIN, GPIO_OUT);
+
+    gpio_init(BUTTON_PIN);
+    gpio_set_dir(BUTTON_PIN, GPIO_IN);
+    gpio_pull_up(BUTTON_PIN); // Ativa o pull-up interno do botão
 }
 
 void turn_off_all_leds() {
-    // Garante que todos os LEDs estão apagados
     gpio_put(BLUE_LED_PIN, 0);
     gpio_put(GREEN_LED_PIN, 0);
     gpio_put(RED_LED_PIN, 0);
 }
 
-void control_leds(char command) {
-    // Apaga todos os LEDs antes de acender o solicitado
+void control_leds(int command) {
     turn_off_all_leds();
 
     if (command == 1) {
-        // Liga o LED verde
         gpio_put(GREEN_LED_PIN, 1);
     } else if (command == 2) {
-        // Liga o LED azul
         gpio_put(BLUE_LED_PIN, 1);
     } else if (command == 3) {
-        // Liga o LED vermelho
         gpio_put(RED_LED_PIN, 1);
     } else if (command == 4) {
-        // Liga todos os LEDs
-        gpio_put(RED_LED_PIN, 1);
         gpio_put(GREEN_LED_PIN, 1);
         gpio_put(BLUE_LED_PIN, 1);
+        gpio_put(RED_LED_PIN, 1);
     } else {
         printf("Comando desconhecido para LEDs\n");
     }
 }
 
 void activate_buzzer() {
-    // Configura o pino do buzzer para gerar sinal PWM
     gpio_set_function(BUZZER_PIN, GPIO_FUNC_PWM);
     uint pwm_slice = pwm_gpio_to_slice_num(BUZZER_PIN);
 
-    // Define os parâmetros do PWM para ajustar a frequência e intensidade
     pwm_set_clkdiv(pwm_slice, 125.0);
     pwm_set_wrap(pwm_slice, 255);
     pwm_set_gpio_level(BUZZER_PIN, 150);
     pwm_set_enabled(pwm_slice, true);
 
-    // Mantém o buzzer ativo por 2 segundos
     sleep_ms(2000);
 
-    // Desativa o PWM do buzzer
     pwm_set_enabled(pwm_slice, false);
 }
 
@@ -92,31 +86,49 @@ int main() {
     configure_pins();
 
     char user_input[20];
+    int button_state = 0;
+    int last_button_state = 1; // Botão começa como "não pressionado"
+    int led_mode = 0; // Estado atual dos LEDs
 
-    printf("Digite um comando (GREEN, BLUE, RED, WHITE, BUZZER, OFF): \n");
+    printf("Digite um comando (GREEN, BLUE, RED, WHITE, BUZZER, OFF) ou pressione o botão:\n");
 
     while (1) {
-        scanf("%19s", user_input);
+        // Verifica o botão
+        button_state = gpio_get(BUTTON_PIN);
 
-        int command = map_command(user_input);
+        if (button_state == 0 && last_button_state == 1) {
+            // Botão foi pressionado
+            led_mode = (led_mode + 1) % 5; // Alterna entre os modos (0 a 4)
+            control_leds(led_mode);
+            printf("Botão pressionado. Modo LED: %d\n", led_mode);
 
-        if (command == 1 || command == 2 || command == 3 || command == 4) {
-            // Controla os LEDs com base no comando recebido
-            control_leds(command);
-            printf("LED ativado: %s\n", user_input);
-        } else if (command == 5) {
-            // Ativa o buzzer por 2 segundos
-            activate_buzzer();
-            printf("Buzzer ativado\n");
-        } else if (command == 6) {
-            // Desliga todos os LEDs
-            turn_off_all_leds();
-            printf("Todos os LEDs foram apagados\n");
-        } else {
-            // Informa que o comando digitado é inválido
-            printf("Comando desconhecido\n");
+            if (led_mode == 0) {
+                printf("Todos os LEDs foram apagados\n");
+            }
+
+            sleep_ms(200); // Debounce
         }
 
-        sleep_ms(100); // Aguarda um curto período antes de processar o próximo comando
+        last_button_state = button_state;
+
+        // Comando via console
+        if (scanf("%19s", user_input) == 1) {
+            int command = map_command(user_input);
+
+            if (command == 1 || command == 2 || command == 3 || command == 4) {
+                control_leds(command);
+                printf("LED ativado: %s\n", user_input);
+            } else if (command == 5) {
+                activate_buzzer();
+                printf("Buzzer ativado\n");
+            } else if (command == 6) {
+                turn_off_all_leds();
+                printf("Todos os LEDs foram apagados\n");
+            } else {
+                printf("Comando desconhecido\n");
+            }
+        }
+
+        sleep_ms(100); // Aguarda antes de processar o próximo comando
     }
 }
