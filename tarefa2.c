@@ -3,14 +3,18 @@
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
 
-#define BUZZER_PIN 21
 #define GREEN_LED_PIN 11
+#define BLUE_LED_PIN 12
 #define RED_LED_PIN 13
+#define BUZZER_PIN 21
 
 void configure_pins()
 {
     gpio_init(GREEN_LED_PIN);
     gpio_set_dir(GREEN_LED_PIN, GPIO_OUT);
+
+    gpio_init(BLUE_LED_PIN);
+    gpio_set_dir(BLUE_LED_PIN, GPIO_OUT);
 
     gpio_init(RED_LED_PIN);
     gpio_set_dir(RED_LED_PIN, GPIO_OUT);
@@ -23,6 +27,7 @@ void turn_off_all_leds()
 {
     // Garante que todos os LEDs estão apagados
     gpio_put(GREEN_LED_PIN, 0);
+    gpio_put(BLUE_LED_PIN, 0);
     gpio_put(RED_LED_PIN, 0);
 }
 
@@ -36,6 +41,11 @@ void control_leds(char command)
         // Liga o LED verde
         gpio_put(GREEN_LED_PIN, 1);
     }
+    else if (command == 2)
+    {
+        // Liga o LED azul
+        gpio_put(BLUE_LED_PIN, 1);
+    }
     else if (command == 3)
     {
         // Liga o LED vermelho
@@ -46,6 +56,7 @@ void control_leds(char command)
         // Liga todos os LEDs
         gpio_put(RED_LED_PIN, 1);
         gpio_put(GREEN_LED_PIN, 1);
+        gpio_put(BLUE_LED_PIN, 1);
     }
     else
     {
@@ -76,6 +87,8 @@ int map_command(const char *input)
 {
     if (strcmp(input, "GREEN") == 0)
         return 1;
+    if (strcmp(input, "BLUE") == 0)
+        return 2;
     if (strcmp(input, "RED") == 0)
         return 3;
     if (strcmp(input, "WHITE") == 0)
