@@ -8,8 +8,9 @@
 #define RED_LED_PIN 13
 #define BUZZER_PIN 21
 
-void configure_pins()
-{
+
+void configure_pins() {
+
     gpio_init(GREEN_LED_PIN);
     gpio_set_dir(GREEN_LED_PIN, GPIO_OUT);
 
