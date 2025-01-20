@@ -8,6 +8,7 @@
 #define BLUE_LED_PIN 12
 #define RED_LED_PIN 13
 
+
 void configure_pins() {
     gpio_init(GREEN_LED_PIN);
     gpio_set_dir(GREEN_LED_PIN, GPIO_OUT);
@@ -40,13 +41,8 @@ void control_leds(char command) {
         // Liga o LED azul
         gpio_put(BLUE_LED_PIN, 1);
     } else if (command == 3) {
-        // Pisca o LED vermelho (comportamento único)
-        for (int i = 0; i < 3; i++) {  // Faz o LED vermelho piscar 3 vezes
-            gpio_put(RED_LED_PIN, 1);
-            sleep_ms(300);  // Liga por 300ms
-            gpio_put(RED_LED_PIN, 0);
-            sleep_ms(300);  // Desliga por 300ms
-        }
+        // Liga o LED vermelho
+        gpio_put(RED_LED_PIN, 1);
     } else if (command == 4) {
         // Liga todos os LEDs
         gpio_put(RED_LED_PIN, 1);
