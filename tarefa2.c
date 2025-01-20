@@ -3,12 +3,14 @@
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
 
-#define BUZZER_PIN 21
 #define GREEN_LED_PIN 11
 #define BLUE_LED_PIN 12
 #define RED_LED_PIN 13
+#define BUZZER_PIN 21
+
 
 void configure_pins() {
+
     gpio_init(GREEN_LED_PIN);
     gpio_set_dir(GREEN_LED_PIN, GPIO_OUT);
 
@@ -22,37 +24,49 @@ void configure_pins() {
     gpio_set_dir(BUZZER_PIN, GPIO_OUT);
 }
 
-void turn_off_all_leds() {
+void turn_off_all_leds()
+{
     // Garante que todos os LEDs estão apagados
-    gpio_put(BLUE_LED_PIN, 0);
     gpio_put(GREEN_LED_PIN, 0);
+    gpio_put(BLUE_LED_PIN, 0);
     gpio_put(RED_LED_PIN, 0);
 }
 
-void control_leds(char command) {
+void control_leds(char command)
+{
     // Apaga todos os LEDs antes de acender o solicitado
     turn_off_all_leds();
 
-    if (command == 1) {
+    if (command == 1)
+    {
         // Liga o LED verde
         gpio_put(GREEN_LED_PIN, 1);
-    } else if (command == 2) {
+    }
+    else if (command == 2)
+    {
         // Liga o LED azul
         gpio_put(BLUE_LED_PIN, 1);
-    } else if (command == 3) {
+    }
+    else if (command == 3)
+    {
         // Liga o LED vermelho
         gpio_put(RED_LED_PIN, 1);
-    } else if (command == 4) {
+    }
+    else if (command == 4)
+    {
         // Liga todos os LEDs
         gpio_put(RED_LED_PIN, 1);
         gpio_put(GREEN_LED_PIN, 1);
         gpio_put(BLUE_LED_PIN, 1);
-    } else {
+    }
+    else
+    {
         printf("Comando desconhecido para LEDs\n");
     }
 }
 
-void activate_buzzer() {
+void activate_buzzer()
+{
     // Configura o pino do buzzer para gerar sinal PWM
     gpio_set_function(BUZZER_PIN, GPIO_FUNC_PWM);
     uint pwm_slice = pwm_gpio_to_slice_num(BUZZER_PIN);
@@ -70,7 +84,8 @@ void activate_buzzer() {
     pwm_set_enabled(pwm_slice, false);
 }
 
-int map_command(const char *input) {
+int map_command(const char *input)
+{
     if (strcmp(input, "GREEN") == 0)
         return 1;
     if (strcmp(input, "BLUE") == 0)
@@ -86,7 +101,8 @@ int map_command(const char *input) {
     return 0;
 }
 
-int main() {
+int main()
+{
     stdio_init_all();
     configure_pins();
 
@@ -94,24 +110,32 @@ int main() {
 
     printf("Digite um comando (GREEN, BLUE, RED, WHITE, BUZZER, OFF): \n");
 
-    while (1) {
+    while (1)
+    {
         scanf("%19s", user_input);
 
         int command = map_command(user_input);
 
-        if (command == 1 || command == 2 || command == 3 || command == 4) {
+        if (command == 1 || command == 2 || command == 3 || command == 4)
+        {
             // Controla os LEDs com base no comando recebido
             control_leds(command);
             printf("LED ativado: %s\n", user_input);
-        } else if (command == 5) {
+        }
+        else if (command == 5)
+        {
             // Ativa o buzzer por 2 segundos
             activate_buzzer();
             printf("Buzzer ativado\n");
-        } else if (command == 6) {
+        }
+        else if (command == 6)
+        {
             // Desliga todos os LEDs
             turn_off_all_leds();
             printf("Todos os LEDs foram apagados\n");
-        } else {
+        }
+        else
+        {
             // Informa que o comando digitado é inválido
             printf("Comando desconhecido\n");
         }
