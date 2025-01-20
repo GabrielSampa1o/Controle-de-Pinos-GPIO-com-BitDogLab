@@ -8,7 +8,6 @@
 #define BLUE_LED_PIN 12
 #define RED_LED_PIN 13
 
-
 void configure_pins() {
     gpio_init(GREEN_LED_PIN);
     gpio_set_dir(GREEN_LED_PIN, GPIO_OUT);
