@@ -1,4 +1,4 @@
-# Nome do Repositório
+Controle-de-Pinos-GPIO-com-BitDogLab
 
 Este repositório contém um projeto voltado para o controle de pinos GPIO utilizando comandos do teclado, com o objetivo de aprender e aplicar conceitos de eletrônica e programação. O projeto utiliza a plataforma Wokwi para simulação de circuitos e o Pico Pi W SDK para o controle de hardware. O foco é facilitar a interação com pinos GPIO por meio da digitação de comandos no terminal, como GREEN, BLUE, RED, WHITE, BUZZER e OFF.
 
